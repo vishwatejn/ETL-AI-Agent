@@ -1,0 +1,9 @@
+﻿Field,Mandatory,Validations,Transformations
+BATCH_ID,Yes,,
+PARTY_ORIG_SYSTEM,Yes,,
+PARTY_ORIG_SYSTEM_REFERENCE,Yes,,
+INSERT_UPDATE_FLAG,,"If the column value is NOT NULL, then it should only be 'I' or 'U'",
+PARTY_TYPE,Yes,,
+PARTY_NUMBER,,,
+PARTY_USAGE_CODE,Yes,,
+ORGANIZATION_NAME,Yes,,

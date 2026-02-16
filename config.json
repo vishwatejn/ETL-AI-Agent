@@ -1,0 +1,6 @@
+{
+    "interface_table_doc": "https://docs.oracle.com/en/cloud/saas/sales/oedms/hzimppartiest-12933.html",
+    "table_name": "HZ_IMP_PARTIES_T",
+    "mapping_sheet_path": "C:/Users/nvishwatej/Desktop/Conversion Agent/parties_mapping_sheet.csv",  
+    "ctl_file_path": "C:/Users/nvishwatej/Desktop/Conversion Agent/HzImpPartiesT.ctl"
+}

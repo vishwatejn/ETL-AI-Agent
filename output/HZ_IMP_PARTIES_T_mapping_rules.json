@@ -1,0 +1,55 @@
+{
+  "table_name": "HZ_IMP_PARTIES_T",
+  "package_name": "HZ_IMP_PARTIES_T_VAL_PKG",
+  "batch_column": "BATCH_ID",
+  "rules": [
+    {
+      "field": "BATCH_ID",
+      "mandatory": true,
+      "validation": "",
+      "transformation": ""
+    },
+    {
+      "field": "PARTY_ORIG_SYSTEM",
+      "mandatory": true,
+      "validation": "",
+      "transformation": ""
+    },
+    {
+      "field": "PARTY_ORIG_SYSTEM_REFERENCE",
+      "mandatory": true,
+      "validation": "",
+      "transformation": ""
+    },
+    {
+      "field": "INSERT_UPDATE_FLAG",
+      "mandatory": false,
+      "validation": "If the column value is NOT NULL, then it should only be 'I' or 'U'",
+      "transformation": ""
+    },
+    {
+      "field": "PARTY_TYPE",
+      "mandatory": true,
+      "validation": "",
+      "transformation": ""
+    },
+    {
+      "field": "PARTY_NUMBER",
+      "mandatory": false,
+      "validation": "",
+      "transformation": ""
+    },
+    {
+      "field": "PARTY_USAGE_CODE",
+      "mandatory": true,
+      "validation": "",
+      "transformation": ""
+    },
+    {
+      "field": "ORGANIZATION_NAME",
+      "mandatory": true,
+      "validation": "",
+      "transformation": ""
+    }
+  ]
+}
