@@ -1,0 +1,10 @@
+{
+    "interface_table_doc": "https://docs.oracle.com/en/cloud/saas/sales/oedms/hzimppartiest-12933.html",
+    "table_name": "HZ_IMP_PARTIES_T",
+    "mapping_sheet_path": "/path/to/your/parties_mapping_sheet.csv",
+    "ctl_file_path": "/path/to/your/HzImpPartiesT.ctl",
+    "atp_username": "YOUR_ATP_USERNAME",
+    "atp_password": "YOUR_ATP_PASSWORD",
+    "atp_wallet_file_path": "/path/to/your/Wallet_DB.zip",
+    "atp_service": "yourdb_tp"
+}
