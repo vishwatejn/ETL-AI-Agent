@@ -1,4 +1,4 @@
-# Oracle ERP Data Conversion Agent
+# Oracle ERP Data Conversion AI Agent
 
 An AI-powered agent that automates validation, transformation, and load file creation for Oracle ERP interface tables. Built as a set of Cursor IDE skills, it takes an Oracle interface table documentation URL and a mapping sheet as input and produces validated, export-ready data.
 
@@ -71,8 +71,8 @@ The agent follows a 4-step pipeline. Each step is an independent Cursor skill ba
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/vishwatejn/Conversion-Agent.git
-   cd Conversion-Agent
+   git clone https://github.com/vishwatejn/ETL-AI-Agent.git
+   cd ETL-AI-Agent
    ```
 
 2. Install dependencies:
