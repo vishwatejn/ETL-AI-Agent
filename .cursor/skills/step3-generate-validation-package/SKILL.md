@@ -1,16 +1,16 @@
 ---
 name: step3-generate-validation-package
-description: Generate an Oracle PL/SQL validation package (.pks, .pkb) from the mapping sheet CSV. Use when the user asks to create the validation package, run Step 3, or generate validation/transformation logic for the Conversion Agent.
+description: Generate an Oracle PL/SQL validation package (.pks, .pkb) from the mapping sheet CSV and optionally deploy via SQLcl MCP. Use when the user asks to create the validation package, run Step 3, or generate validation/transformation logic for the Conversion Agent.
 ---
 
 # Step 3 -- Generate Validation Package
 
-Read the mapping sheet CSV, generate Oracle PL/SQL validation and transformation package files, and save them to `/output`.
+Read the mapping sheet CSV, generate Oracle PL/SQL validation and transformation package files, save them to `output/`, and optionally compile them in the database using **SQLcl MCP**.
 
 ## Prerequisites
 
 - Steps 1 and 2 complete (interface columns CSV exists and table created on ATP).
-- `config.json` must contain: `mapping_sheet_path`, `table_name`.
+- `config.json` must contain: `mapping_sheet_path`, `table_name`. For deploying to the DB: `sqlcl_connection_name`.
 - The mapping sheet CSV must have at least a `Field` header. Optional headers: `Mandatory`, `Validations`, `Transformations`.
 - Python 3 available on PATH.
 
@@ -45,6 +45,7 @@ Task Progress:
 - [ ] Step 2: Review generated package body for TODO comments
 - [ ] Step 3: Complete any TODO items using LLM intelligence
 - [ ] Step 4: Verify output
+- [ ] Step 5 (optional): Deploy package to DB via SQLcl MCP
 ```
 
 ### Step 1 -- Run the generator script
@@ -87,6 +88,17 @@ Check the generated files for:
   - Exception handler at the end.
 - No remaining TODO comments (all rules implemented).
 - No dangerous SQL outside comments.
+
+### Step 5 (optional) -- Deploy package to DB via SQLcl MCP
+
+If `config.json` contains `sqlcl_connection_name`, deploy the package to the database:
+
+1. **Connect**: Call the `connect` tool with `connection_name` = `config.json` → `sqlcl_connection_name`.
+2. **Compile spec**: Read `output/<TABLE_NAME>_VAL_PKG.pks` and execute its contents via `run-sql` (or `run-sqlcl` if the tool expects a single block).
+3. **Compile body**: Read `output/<TABLE_NAME>_VAL_PKG.pkb` and execute its contents via `run-sql` (or `run-sqlcl`).
+4. **Disconnect**: Call the `disconnect` tool.
+
+If compilation errors occur, report them and suggest fixing the package source; do not alter guardrails (no DROP/TRUNCATE/ALTER).
 
 ## Supported validation rule patterns
 
@@ -142,6 +154,7 @@ AND t.PARTY_ORIG_SYSTEM IS NULL;
 | Template files missing | Stop with error |
 | Validation rule unparseable | Emit as TODO comment; warn on stdout |
 | Dangerous SQL in generated output | Print WARNING (does not block) |
+| SQLcl MCP connect/run-sql fails (deploy step) | Report error; ensure connection name and schema are correct |
 
 ## Guardrails
 
