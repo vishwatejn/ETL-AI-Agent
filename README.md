@@ -63,9 +63,25 @@ The agent follows a 4-step pipeline. Each step is an independent Cursor skill ba
 ## Prerequisites
 
 - **Python 3** (3.8+)
-- **python-oracledb** — `pip install oracledb` (required for Step 2)
-- **Oracle ATP access** — an Autonomous Transaction Processing database with a wallet file (Steps 2-4)
+- **Oracle database access** — ATP (or another Oracle DB) reachable from your saved SQLcl connection (Steps 2-4)
 - **Cursor IDE** — recommended for the skill-based workflow (or run scripts standalone)
+- **SQLcl MCP** — Cursor MCP server used by the agent to run DDL and SQL against Oracle (Steps 2–4). See [SQLcl MCP dependency](#sqlcl-mcp-dependency) below.
+
+### SQLcl MCP dependency
+
+Steps **2**, **3**, and **4** run SQL against your Oracle database (create table, deploy package, run spool query). The agent does this through the **SQLcl MCP** server, not via Python or a wallet in scripts. You must:
+
+1. **Enable the SQLcl MCP server** in Cursor (e.g. add and enable the `user-sqlcl` / SQLcl MCP server in your Cursor MCP settings).
+2. **Create a named connection in SQLcl** for your Oracle ATP (or other Oracle) database. The connection name is arbitrary (e.g. `atp_dev`, `conversion_db`).
+3. **Bind the connection to this project** by setting `sqlcl_connection_name` in `config.json` to that exact connection name. The name is **case-sensitive**; it must match the saved connection in SQLcl.
+
+The agent then uses the MCP tools `connect`, `run-sql` / `run-sqlcl`, and `disconnect` with `connection_name` = `config.json` → `sqlcl_connection_name`. You can discover available connection names with the MCP tool `list-connections`. If `sqlcl_connection_name` is missing or invalid, the agent will report an error and ask you to fix the config or create the connection in SQLcl.
+
+| Step | SQLcl MCP usage |
+|------|-----------------|
+| 2 | Connect, run CREATE TABLE DDL, disconnect |
+| 3 | Connect, run package spec/body, disconnect (optional deploy) |
+| 4 | Connect, run spool query (optional), disconnect |
 
 ## Setup
 
@@ -76,9 +92,9 @@ The agent follows a 4-step pipeline. Each step is an independent Cursor skill ba
    ```
 
 2. Install dependencies:
-   ```bash
-   pip install oracledb
-   ```
+   - Install **SQLcl**: https://www.oracle.com/database/sqldeveloper/technologies/sqlcl/download/
+   - In Cursor, enable/configure your SQLcl MCP server (for this repo: `user-sqlcl`).
+   - Verify a named SQLcl connection exists (or create one) that points to your target DB.
 
 3. Create your config file:
    ```bash
@@ -90,9 +106,7 @@ The agent follows a 4-step pipeline. Each step is an independent Cursor skill ba
    - `table_name` — name for the interface table (e.g. `HZ_IMP_PARTIES_T`)
    - `mapping_sheet_path` — path to your mapping sheet CSV
    - `ctl_file_path` — path to your SQL*Loader control file
-   - `atp_username` / `atp_password` — Oracle ATP credentials
-   - `atp_wallet_file_path` — path to your downloaded ATP wallet zip
-   - `atp_service` — ATP service name (e.g. `yourdb_tp`)
+   - `sqlcl_connection_name` — name of the saved SQLcl connection to use for Steps 2–4 (must match exactly; see [SQLcl MCP dependency](#sqlcl-mcp-dependency))
 
 ## Usage
 
@@ -109,7 +123,7 @@ The agent will execute the script, verify the output, and in Step 3, complete an
 
 ### Standalone Python Scripts
 
-Run each step directly from the workspace root:
+Run each step directly from the workspace root to generate artifacts. For DB execution in Steps 2-4, use Cursor + SQLcl MCP (or run the generated SQL manually in SQLcl):
 
 ```bash
 # Step 1: Fetch interface table columns → output/*_interface_columns.csv
